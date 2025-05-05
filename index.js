@@ -1,7 +1,7 @@
 const http = require('http');
 const url = require('url');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3003;
 
 const server = http.createServer((req, res) => {
     const parsedUrl = url.parse(req.url, true);
