@@ -1,20 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Agent 控制面板</title>
+    <meta charset="UTF-8">
+    <title>AI Agent 界面</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f2f2f2; padding: 50px; }
+        h1 { color: #333; }
+        input, button { padding: 10px; font-size: 16px; }
+        #response { margin-top: 20px; padding: 10px; background: #fff; border-radius: 5px; }
+    </style>
 </head>
 <body>
-  <h1>AI Agent 云端版</h1>
-  <p>状态: <span id="status">加载中...</span></p>
+    <h1>AI Agent 聊天界面</h1>
+    <input type="text" id="userInput" placeholder="输入你的问题...">
+    <button onclick="sendMessage()">发送</button>
 
-  <script>
-    fetch("/api/status")
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById("status").innerText = data.status + " - 运行时间: " + data.uptime + " 秒";
-      });
-  </script>
+    <div id="response"></div>
+
+    <script>
+        async function sendMessage() {
+            const userInput = document.getElementById('userInput').value;
+            const resDiv = document.getElementById('response');
+            resDiv.innerHTML = "等待AI回复中...";
+
+            const response = await fetch('/api/ai', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: userInput })
+            });
+
+            const result = await response.json();
+            resDiv.innerHTML = "<b>AI回复：</b>" + result.message;
+        }
+    </script>
 </body>
 </html>
